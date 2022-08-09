@@ -2,11 +2,12 @@ import enum
 
 from sqlalchemy import TIMESTAMP
 
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String,Float,Enum,Text,BigInteger
-from sqlalchemy.dialects.postgresql import UUID,BYTEA
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Float, Enum, Text, BigInteger
+from sqlalchemy.dialects.postgresql import UUID, BYTEA
 from sqlalchemy.orm import relationship
 
 from .database import Base
+
 
 class BaseModel(Base):
     __abstract__ = True
@@ -18,6 +19,7 @@ class BaseModel(Base):
     def __repr__(self):
         return "<{0.__class__.__name__}(id={0.id!r})>".format(self)
 
+
 class Brand(BaseModel):
     __tablename__ = "brands"
 
@@ -25,6 +27,7 @@ class Brand(BaseModel):
     brand = Column(String)
 
     models = relationship("Models", back_populates="brand")
+
 
 class Model(BaseModel):
     __tablename__ = "models"
@@ -43,12 +46,14 @@ class Product(BaseModel):
     price = Column(Float)
     model_id = Column(UUID, ForeignKey("models.id"))
 
-    deals=relationship("Deal",back_populates="product")
+    deals = relationship("Deal", back_populates="product")
+
 
 class MyEnum(enum.Enum):
     one = 1
     two = 2
     three = 3
+
 
 class Deal(BaseModel):
     __tablename__ = 'deals'
@@ -56,34 +61,38 @@ class Deal(BaseModel):
     product_id = Column(UUID, ForeignKey("products.id"))
     status = Column(Enum(MyEnum))
     time = Column(TIMESTAMP)
-    description=Column(Text)
-    qr_code=Column(BYTEA)
+    description = Column(Text)
+    qr_code = Column(BYTEA)
     image = Column(BYTEA)
     transaction = Column(Enum(MyEnum))
     user_id = Column(BigInteger, ForeignKey("users.id"))
 
+
 class Group(BaseModel):
     __tablename__ = 'groups'
     id = Column(UUID, primary_key=True)
-    name=Column(Text)
+    name = Column(Text)
 
-users=relationship("User",back_populates="group")
-messages=relationship("Mailing",back_populates="group")
+
+users = relationship("User", back_populates="group")
+messages = relationship("Mailing", back_populates="group")
+
 
 class User(BaseModel):
     __tablename__ = 'users'
     tg_id = Column(BigInteger, primary_key=True)
-    tg_tag=Column(Text)
+    tg_tag = Column(Text)
     group_id = Column(UUID, ForeignKey('groups.id'))
 
-deals=relationship("Deal",back_populates="user")
+
+deals = relationship("Deal", back_populates="user")
+
 
 class Mailing(BaseModel):
     __tablename__ = 'Messages'
-    id = Column(Integer, primary_key=True,autoincrement=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(Text)
     text = Column(Text)
-    status=Column(Enum(MyEnum))
-    time_to_send=Column(TIMESTAMP)
+    status = Column(Enum(MyEnum))
+    time_to_send = Column(TIMESTAMP)
     group_id = Column(UUID, ForeignKey('groups.id'))
-
