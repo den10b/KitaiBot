@@ -62,9 +62,28 @@ class Deal(BaseModel):
     transaction = Column(Enum(MyEnum))
     user_id = Column(BigInteger, ForeignKey("users.id"))
 
+class Group(BaseModel):
+    __tablename__ = 'groups'
+    id = Column(UUID, primary_key=True)
+    name=Column(Text)
 
-class Comment(Base):
-    __tablename__ = 'comments'
-    id = Column(Integer, primary_key=True)
-    article_id = Column(Integer, ForeignKey('articles.id'))
+users=relationship("User",back_populates="group")
+messages=relationship("Mailing",back_populates="group")
+
+class User(BaseModel):
+    __tablename__ = 'users'
+    tg_id = Column(BigInteger, primary_key=True)
+    tg_tag=Column(Text)
+    group_id = Column(UUID, ForeignKey('groups.id'))
+
+deals=relationship("Deal",back_populates="user")
+
+class Mailing(BaseModel):
+    __tablename__ = 'Messages'
+    id = Column(Integer, primary_key=True,autoincrement=True)
+    name = Column(Text)
+    text = Column(Text)
+    status=Column(Enum(MyEnum))
+    time_to_send=Column(TIMESTAMP)
+    group_id = Column(UUID, ForeignKey('groups.id'))
 
