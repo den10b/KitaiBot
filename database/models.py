@@ -54,7 +54,7 @@ class Deal(Base):
     qr_code = Column(BYTEA)
     image = Column(BYTEA)
     transaction = Column(Enum(MyEnum))
-    user_id = Column(BigInteger, ForeignKey("users.id"))
+    user_id = Column(BigInteger, ForeignKey("users.tg_id"))
 
 
 class Group(Base):
@@ -78,7 +78,7 @@ deals = relationship("Deal", back_populates="user")
 
 
 class Mailing(Base):
-    __tablename__ = 'Messages'
+    __tablename__ = 'messages'
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(Text)
     text = Column(Text)
