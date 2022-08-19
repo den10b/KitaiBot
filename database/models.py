@@ -79,7 +79,7 @@ deals = relationship("Deal", back_populates="user")
 
 class Mailing(Base):
     __tablename__ = 'messages'
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(UUID, primary_key=True, autoincrement=True)
     name = Column(Text)
     text = Column(Text)
     status = Column(Enum(MyEnum))
