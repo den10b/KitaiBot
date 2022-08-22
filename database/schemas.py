@@ -64,9 +64,10 @@ class User(UserIn):
         orm_mode = True
 
 
-class BEnum(IntEnum):
-    spanner = 1
-    wrench = 2
+class MyEnum(IntEnum):
+    one = 1
+    two = 2
+    three = 3
 
 
 class DealIn(BaseModel):
