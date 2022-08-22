@@ -9,7 +9,7 @@ from sqlalchemy.orm import relationship
 from .database import Base
 
 
-class Brand(Base):
+class BrandModel(Base):
     __tablename__ = "brands"
 
     id = Column(UUID, primary_key=True, index=True)
@@ -18,7 +18,7 @@ class Brand(Base):
     models = relationship("Models", back_populates="brand")
 
 
-class Model(Base):
+class ModelModel(Base):
     __tablename__ = "models"
 
     id = Column(UUID, primary_key=True, index=True)
@@ -28,7 +28,7 @@ class Model(Base):
     products = relationship("Product", back_populates="model")
 
 
-class Product(Base):
+class ProductModel(Base):
     __tablename__ = 'products'
     id = Column(UUID, primary_key=True, index=True)
     size = Column(Float)
@@ -44,7 +44,7 @@ class MyEnum(enum.Enum):
     three = 3
 
 
-class Deal(Base):
+class DealModel(Base):
     __tablename__ = 'deals'
     id = Column(UUID, primary_key=True, index=True)
     product_id = Column(UUID, ForeignKey("products.id"))
@@ -57,7 +57,7 @@ class Deal(Base):
     user_id = Column(BigInteger, ForeignKey("users.tg_id"))
 
 
-class Group(Base):
+class GroupModel(Base):
     __tablename__ = 'groups'
     id = Column(UUID, primary_key=True)
     name = Column(Text)
@@ -67,7 +67,7 @@ users = relationship("User", back_populates="group")
 messages = relationship("Mailing", back_populates="group")
 
 
-class User(Base):
+class UserModel(Base):
     __tablename__ = 'users'
     tg_id = Column(BigInteger, primary_key=True)
     tg_tag = Column(Text)
@@ -77,7 +77,7 @@ class User(Base):
 deals = relationship("Deal", back_populates="user")
 
 
-class Mailing(Base):
+class MailingModel(Base):
     __tablename__ = 'messages'
     id = Column(UUID, primary_key=True, autoincrement=True)
     name = Column(Text)
