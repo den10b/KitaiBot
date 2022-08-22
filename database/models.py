@@ -6,8 +6,7 @@ from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Float, Enum
 from sqlalchemy.dialects.postgresql import UUID, BYTEA
 from sqlalchemy.orm import relationship
 
-from .database import Base
-
+from database.database_conf  import Base
 
 class BrandModel(Base):
     __tablename__ = "brands"
@@ -15,7 +14,7 @@ class BrandModel(Base):
     id = Column(UUID, primary_key=True, index=True)
     brand = Column(String)
 
-    models = relationship("Models", back_populates="brand")
+    models = relationship("ModelModel", backref ="brand")
 
 
 class ModelModel(Base):
@@ -25,7 +24,7 @@ class ModelModel(Base):
     model = Column(String)
     brand_id = Column(UUID, ForeignKey("brands.id"))
 
-    products = relationship("Product", back_populates="model")
+    products = relationship("ProductModel", backref ="model")
 
 
 class ProductModel(Base):
@@ -35,7 +34,7 @@ class ProductModel(Base):
     price = Column(Float)
     model_id = Column(UUID, ForeignKey("models.id"))
 
-    deals = relationship("Deal", back_populates="product")
+    deals = relationship("DealModel", backref ="product")
 
 
 class MyEnum(enum.Enum):
@@ -63,8 +62,8 @@ class GroupModel(Base):
     name = Column(Text)
 
 
-users = relationship("User", back_populates="group")
-messages = relationship("Mailing", back_populates="group")
+users = relationship("UserModel", backref ="group")
+messages = relationship("MailingModel", backref ="group")
 
 
 class UserModel(Base):
@@ -74,12 +73,12 @@ class UserModel(Base):
     group_id = Column(UUID, ForeignKey('groups.id'))
 
 
-deals = relationship("Deal", back_populates="user")
+deals = relationship("DealModel", backref ="user")
 
 
 class MailingModel(Base):
     __tablename__ = 'messages'
-    id = Column(UUID, primary_key=True, autoincrement=True)
+    id = Column(UUID, primary_key=True)
     name = Column(Text)
     text = Column(Text)
     status = Column(Enum(MyEnum))

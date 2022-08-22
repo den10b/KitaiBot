@@ -74,8 +74,8 @@ class DealIn(BaseModel):
     product_id: UUID
     status: str
     description: str
-    qr_code: bytearray
-    image: bytearray
+    qr_code: bytes
+    image: bytes
     transaction: str
     user_id: int
 
