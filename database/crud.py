@@ -1,13 +1,11 @@
 import uvicorn as uvicorn
 
-from models import BrandModel, ModelModel, ProductModel, DealModel, GroupModel, UserModel, MailingModel
-from schemas import *
-from database_conf import get_db
-from fastapi import FastAPI
+from .models import BrandModel, ModelModel, ProductModel, DealModel, GroupModel, UserModel, MailingModel
+from .schemas import *
+from .database_conf import get_db
 from fastapi_crudrouter import SQLAlchemyCRUDRouter
 
-app = FastAPI()
-Brandrouter = SQLAlchemyCRUDRouter(
+Brand_router = SQLAlchemyCRUDRouter(
     schema=Brand,
     create_schema=BrandIn,
     db_model=BrandModel,
@@ -15,9 +13,7 @@ Brandrouter = SQLAlchemyCRUDRouter(
     prefix='brand'
 )
 
-app.include_router(Brandrouter)
-
-Modelrouter = SQLAlchemyCRUDRouter(
+Model_router = SQLAlchemyCRUDRouter(
     schema=Model,
     create_schema=ModelIn,
     db_model=ModelModel,
@@ -25,9 +21,7 @@ Modelrouter = SQLAlchemyCRUDRouter(
     prefix='model'
 )
 
-app.include_router(Modelrouter)
-
-Productrouter = SQLAlchemyCRUDRouter(
+Product_router = SQLAlchemyCRUDRouter(
     schema=Product,
     create_schema=ProductIn,
     db_model=ProductModel,
@@ -35,9 +29,7 @@ Productrouter = SQLAlchemyCRUDRouter(
     prefix='product'
 )
 
-app.include_router(Productrouter)
-
-Dealrouter = SQLAlchemyCRUDRouter(
+Deal_router = SQLAlchemyCRUDRouter(
     schema=Deal,
     create_schema=DealIn,
     db_model=DealModel,
@@ -45,9 +37,7 @@ Dealrouter = SQLAlchemyCRUDRouter(
     prefix='deal'
 )
 
-app.include_router(Dealrouter)
-
-Grouprouter = SQLAlchemyCRUDRouter(
+Group_router = SQLAlchemyCRUDRouter(
     schema=Group,
     create_schema=GroupIn,
     db_model=GroupModel,
@@ -55,9 +45,7 @@ Grouprouter = SQLAlchemyCRUDRouter(
     prefix='group'
 )
 
-app.include_router(Grouprouter)
-
-Userrouter = SQLAlchemyCRUDRouter(
+User_router = SQLAlchemyCRUDRouter(
     schema=User,
     create_schema=UserIn,
     db_model=UserModel,
@@ -65,18 +53,10 @@ Userrouter = SQLAlchemyCRUDRouter(
     prefix='user'
 )
 
-app.include_router(Userrouter)
-
-Mailingrouter = SQLAlchemyCRUDRouter(
+Mailing_router = SQLAlchemyCRUDRouter(
     schema=Mailing,
     create_schema=MailingIn,
     db_model=MailingModel,
     db=get_db,
     prefix='mailing'
 )
-
-app.include_router(Userrouter)
-
-
-if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8000)
