@@ -1,7 +1,6 @@
 import os
 from dataclasses import dataclass
 
-import django
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from environs import Env
 
@@ -61,7 +60,7 @@ def load_config(path: str = None):
     )
 
 
-def setup_django():
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'admin_panel.settings')
-    os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
-    django.setup()
+# def setup_django():
+#     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'admin_panel.settings')
+#     os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
+#     django.setup()

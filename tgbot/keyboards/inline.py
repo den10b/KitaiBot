@@ -32,53 +32,6 @@ main_menu_buttons = InlineKeyboardMarkup(
     ]
 )
 
-shop_menu_buttons = InlineKeyboardMarkup(
-    inline_keyboard=[
-        [
-            InlineKeyboardButton(text="Новости", callback_data=MainMenuCallbackFactory(type="news").pack())
-        ],
-        [
-            InlineKeyboardButton(text="🧑‍💻 Поддержка", callback_data=MainMenuCallbackFactory(type="support").pack())
-        ],
-        [
-            InlineKeyboardButton(text="📨 Отзывы/идеи",
-                                 callback_data=MainMenuCallbackFactory(type="reviews_ideas").pack())
-        ],
-        [
-            InlineKeyboardButton(text="◀️ Назад", callback_data=BackButtonCallbackFactory(to='main_menu').pack())
-        ]
-    ]
-)
-
-buy_menu_buttons = InlineKeyboardMarkup(
-    inline_keyboard=[
-        [
-            InlineKeyboardButton(text="Купить металл", callback_data=MainMenuCallbackFactory(type="buy_metal").pack())
-        ],
-        [
-            InlineKeyboardButton(text="Купить камни", callback_data=MainMenuCallbackFactory(type="buy_stone").pack())
-        ],
-        [
-            InlineKeyboardButton(text="◀️ Назад", callback_data=MainMenuCallbackFactory(type="menu").pack())
-        ]
-    ]
-)
-
-sell_menu_buttons = InlineKeyboardMarkup(
-    inline_keyboard=[
-        [
-            InlineKeyboardButton(text="💹 Актуальные цены",
-                                 callback_data=MainMenuCallbackFactory(type="actual_prices").pack())
-        ],
-        [
-            InlineKeyboardButton(text="💰 Рассчитать стоимость",
-                                 callback_data=MainMenuCallbackFactory(type="calculate_prices").pack())
-        ],
-        [
-            InlineKeyboardButton(text="◀️ Назад", callback_data=MainMenuCallbackFactory(type="menu").pack())
-        ]
-    ]
-)
 
 
 async def back_button(to: str = "main_menu"):

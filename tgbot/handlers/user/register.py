@@ -1,12 +1,12 @@
 import asyncio
 
 from aiogram import Router, types, F
-from aiogram.dispatcher.filters import Command, ContentTypesFilter
+from aiogram.filters import Command, ContentTypesFilter
 
 from tgbot.filters.user_filter import IsRegistered
 from tgbot.keyboards.reply import phone_keyboard
 from tgbot.keyboards.inline import main_menu_buttons
-from database.models import TgUser, TgAdmin
+from database.models import UserModel
 
 
 reg_router = Router()
@@ -31,13 +31,13 @@ async def registration_get_number(message: types.Message):
     """
     if message.contact.phone_number and message.contact.user_id == message.from_user.id:
         number = message.contact.phone_number.replace('+', '')
-        new_user: TgUser = TgUser()
+        new_user: UserModel = UserModel()
         new_user.user_id = message.from_user.id
         new_user.phone_number = number
         new_user.username = message.from_user.username
         new_user.save()
-        if TgAdmin.objects.all().count() == 0:
-            TgAdmin(user_id=new_user).save()
+        if UserModel.objects.all().count() == 0:
+            UserModel(user_id=new_user).save()
         text = f'{message.from_user.first_name}, вы успешно прошли регистрацию в боте!\n'
         await message.answer(text, reply_markup=types.ReplyKeyboardRemove())
         await message.answer('Главное меню: ', reply_markup=main_menu_buttons)

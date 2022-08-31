@@ -1,6 +1,6 @@
 from aiogram import Router, types, F
-from aiogram.dispatcher.filters.command import CommandStart
-from aiogram.dispatcher.fsm.context import FSMContext
+from aiogram.filters.command import CommandStart
+from aiogram.fsm.context import FSMContext
 from loguru import logger
 
 from tgbot.keyboards.callback_factory import BackButtonCallbackFactory

@@ -1,7 +1,7 @@
-from aiogram.dispatcher.filters import BaseFilter
+from aiogram.filters import BaseFilter
 from aiogram import types
 
-from database.models import TgUser
+from database.models import UserModel
 
 
 class IsRegistered(BaseFilter):
@@ -11,7 +11,7 @@ class IsRegistered(BaseFilter):
     is_registered: bool = True
 
     async def __call__(self, update: types.Message | types.CallbackQuery) -> bool:
-        user: TgUser | None = TgUser.objects.filter(user_id=update.from_user.id).first()
+        user: UserModel | None = UserModel.objects.filter(user_id=update.from_user.id).first()
         if user:
             return True is self.is_registered
         return False is self.is_registered
