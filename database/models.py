@@ -1,5 +1,5 @@
 import enum
-
+import uuid
 from sqlalchemy import TIMESTAMP
 
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Float, Enum, Text, BigInteger
@@ -12,7 +12,7 @@ from database.database_conf import Base
 class BrandModel(Base):
     __tablename__ = "brands"
 
-    id = Column(UUID, primary_key=True, index=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
     brand = Column(String)
 
     models = relationship("ModelModel", backref="brand")
@@ -21,19 +21,19 @@ class BrandModel(Base):
 class ModelModel(Base):
     __tablename__ = "models"
 
-    id = Column(UUID, primary_key=True, index=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
     model = Column(String)
-    brand_id = Column(UUID, ForeignKey("brands.id"))
+    brand_id = Column(UUID(as_uuid=True), ForeignKey("brands.id"))
 
     products = relationship("ProductModel", backref="model")
 
 
 class ProductModel(Base):
     __tablename__ = 'products'
-    id = Column(UUID, primary_key=True, index=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
     size = Column(Float)
     price = Column(Float)
-    model_id = Column(UUID, ForeignKey("models.id"))
+    model_id = Column(UUID(as_uuid=True), ForeignKey("models.id"))
 
     deals = relationship("DealModel", backref="product")
 
@@ -46,8 +46,8 @@ class MyEnum(enum.Enum):
 
 class DealModel(Base):
     __tablename__ = 'deals'
-    id = Column(UUID, primary_key=True, index=True)
-    product_id = Column(UUID, ForeignKey("products.id"))
+    id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
+    product_id = Column(UUID(as_uuid=True), ForeignKey("products.id"))
     status = Column(Enum(MyEnum))
     time = Column(TIMESTAMP)
     description = Column(Text)
@@ -59,7 +59,7 @@ class DealModel(Base):
 
 class GroupModel(Base):
     __tablename__ = 'groups'
-    id = Column(UUID, primary_key=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name = Column(Text)
 
 
@@ -71,7 +71,7 @@ class UserModel(Base):
     __tablename__ = 'users'
     tg_id = Column(BigInteger, primary_key=True)
     tg_tag = Column(Text)
-    group_id = Column(UUID, ForeignKey('groups.id'))
+    group_id = Column(UUID(as_uuid=True), ForeignKey('groups.id'))
 
 
 deals = relationship("DealModel", backref="user")
@@ -79,9 +79,10 @@ deals = relationship("DealModel", backref="user")
 
 class MailingModel(Base):
     __tablename__ = 'messages'
-    id = Column(UUID, primary_key=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name = Column(Text)
     text = Column(Text)
     status = Column(Enum(MyEnum))
     time_to_send = Column(TIMESTAMP)
     group_id = Column(UUID, ForeignKey('groups.id'))
+

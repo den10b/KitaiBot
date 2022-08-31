@@ -31,5 +31,4 @@ def get_db():
 # mapper_registry = registry()
 
 Base = declarative_base()
-
 # MetaData = mapper_registry.metadata
