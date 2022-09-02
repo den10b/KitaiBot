@@ -11,13 +11,13 @@ from tgbot.keyboards.inline import *
 from tgbot.states.shop import ShopState
 
 
-menu_router = Router()
-menu_router.message.filter(IsRegistered())
-menu_router.callback_query.filter(IsRegistered())
+shop_router = Router()
+shop_router.message.filter(IsRegistered())
+shop_router.callback_query.filter(IsRegistered())
 
 
-@menu_router.callback_query(MainMenuCallbackFactory.filter(F.type == "shop_brand"), state='*')
-@menu_router.callback_query(BackButtonCallbackFactory.filter(F.to == "shop_brand"), state=ShopState.model_choice)
+@shop_router.callback_query(MainMenuCallbackFactory.filter(F.type == "shop_brand"), state='*')
+@shop_router.callback_query(BackButtonCallbackFactory.filter(F.to == "shop_brand"), state=ShopState.model_choice)
 async def brand_choice(call: types.CallbackQuery, state: FSMContext):
     text = 'Выберите бренд: '
     key = shop_brand_buttons
@@ -29,8 +29,8 @@ async def brand_choice(call: types.CallbackQuery, state: FSMContext):
     await state.set_state(ShopState.brand_choice)
 
 
-@menu_router.callback_query(ShopCallbackFactory.filter(), state=ShopState.brand_choice)
-@menu_router.callback_query(BackButtonCallbackFactory.filter(F.to == "shop_model"), state=ShopState.product_choice)
+@shop_router.callback_query(ShopCallbackFactory.filter(), state=ShopState.brand_choice)
+@shop_router.callback_query(BackButtonCallbackFactory.filter(F.to == "shop_model"), state=ShopState.product_choice)
 async def model_choice(call: types.CallbackQuery, state: FSMContext, callback_data: ShopCallbackFactory):
     try:
         await state.update_data({"brand": callback_data.action})
@@ -46,8 +46,8 @@ async def model_choice(call: types.CallbackQuery, state: FSMContext, callback_da
         logger.warning(e)
         await call.message.answer(text, reply_markup=await key(brand))
     await state.set_state(ShopState.model_choice)
-@menu_router.callback_query(ShopCallbackFactory.filter(), state=ShopState.model_choice)
-@menu_router.callback_query(BackButtonCallbackFactory.filter(F.to == "shop_product"), state="*")
+@shop_router.callback_query(ShopCallbackFactory.filter(), state=ShopState.model_choice)
+@shop_router.callback_query(BackButtonCallbackFactory.filter(F.to == "shop_product"), state="*")
 async def model_choice(call: types.CallbackQuery, state: FSMContext, callback_data: ShopCallbackFactory):
     try:
         await state.update_data({"model": callback_data.action})
