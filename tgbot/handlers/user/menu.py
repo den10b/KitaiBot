@@ -8,7 +8,7 @@ from loguru import logger
 from tgbot.filters.user_filter import IsRegistered
 from tgbot.keyboards.callback_factory import MainMenuCallbackFactory, ActionCallbackFactory, BackButtonCallbackFactory
 from tgbot.keyboards.inline import *
-
+from tgbot.states.shop import ShopState
 
 
 menu_router = Router()
@@ -16,38 +16,61 @@ menu_router.message.filter(IsRegistered())
 menu_router.callback_query.filter(IsRegistered())
 
 
-@menu_router.callback_query(MainMenuCallbackFactory.filter(F.type == "menu"), state='*')
-@menu_router.callback_query(BackButtonCallbackFactory.filter(F.to == "menu"), state='*')
-async def menu_main(call: types.CallbackQuery, state: FSMContext):
-    text = 'Здесь можно что-нибудь купить/продать: '
-    key = shop_menu_buttons
+@menu_router.callback_query(MainMenuCallbackFactory.filter(F.type == "shop_brand"), state='*')
+@menu_router.callback_query(BackButtonCallbackFactory.filter(F.to == "shop_brand"), state=ShopState.model_choice)
+async def brand_choice(call: types.CallbackQuery, state: FSMContext):
+    text = 'Выберите бренд: '
+    key = shop_brand_buttons
     try:
-        await call.message.edit_text(text, reply_markup=key)
+        await call.message.edit_text(text, reply_markup=await key())
     except Exception as e:
         logger.warning(e)
-        await call.message.answer(text, reply_markup=key)
-    await state.clear()
+        await call.message.answer(text, reply_markup=await key())
+    await state.set_state(ShopState.brand_choice)
 
 
-@menu_router.callback_query(MainMenuCallbackFactory.filter(F.type == 'buy'), state='*')
-async def menu_buy_call(call: types.CallbackQuery, state: FSMContext):
-    await state.clear()
-    text = 'Меню покупки: '
-    key = buy_menu_buttons
+@menu_router.callback_query(ShopCallbackFactory.filter(), state=ShopState.brand_choice)
+@menu_router.callback_query(BackButtonCallbackFactory.filter(F.to == "shop_model"), state=ShopState.product_choice)
+async def model_choice(call: types.CallbackQuery, state: FSMContext, callback_data: ShopCallbackFactory):
     try:
-        await call.message.edit_text(text, reply_markup=key)
+        await state.update_data({"brand": callback_data.action})
+        brand = callback_data.action
+    except:
+        brand = (await state.get_data()).get("brand")
+
+    text = 'Выберите модель: '
+    key = shop_model_buttons
+    try:
+        await call.message.edit_text(text, reply_markup=await key(brand))
     except Exception as e:
         logger.warning(e)
-        await call.message.answer(text, reply_markup=key)
-
-
-@menu_router.callback_query(MainMenuCallbackFactory.filter(F.type == 'sell'), state='*')
-async def menu_sell_call(call: types.CallbackQuery, state: FSMContext):
-    await state.clear()
-    text = 'Меню продажи: '
-    key = sell_menu_buttons
+        await call.message.answer(text, reply_markup=await key(brand))
+    await state.set_state(ShopState.model_choice)
+@menu_router.callback_query(ShopCallbackFactory.filter(), state=ShopState.model_choice)
+@menu_router.callback_query(BackButtonCallbackFactory.filter(F.to == "shop_product"), state="*")
+async def model_choice(call: types.CallbackQuery, state: FSMContext, callback_data: ShopCallbackFactory):
     try:
-        await call.message.edit_text(text, reply_markup=key)
+        await state.update_data({"model": callback_data.action})
+        model = callback_data.action
+    except:
+        model = (await state.get_data()).get("model")
+
+    text = 'Выберите продукт: '
+    key = shop_product_buttons
+    try:
+        await call.message.edit_text(text, reply_markup=await key(model))
     except Exception as e:
         logger.warning(e)
-        await call.message.answer(text, reply_markup=key)
+        await call.message.answer(text, reply_markup=await key(model))
+    await state.set_state(ShopState.product_choice)
+
+# @menu_router.callback_query(MainMenuCallbackFactory.filter(F.type == 'sell'), state='*')
+# async def menu_sell_call(call: types.CallbackQuery, state: FSMContext):
+#     await state.clear()
+#     text = 'Меню продажи: '
+#     key = sell_menu_buttons
+#     try:
+#         await call.message.edit_text(text, reply_markup=key)
+#     except Exception as e:
+#         logger.warning(e)
+#         await call.message.answer(text, reply_markup=key)

@@ -1,5 +1,6 @@
 import asyncio
 
+import httpx
 from aiogram import Router, types, F
 from aiogram.filters import Command, ContentTypesFilter
 
@@ -30,14 +31,14 @@ async def registration_get_number(message: types.Message):
     :return: None
     """
     if message.contact.phone_number and message.contact.user_id == message.from_user.id:
-        number = message.contact.phone_number.replace('+', '')
-        new_user: UserModel = UserModel()
-        new_user.user_id = message.from_user.id
-        new_user.phone_number = number
-        new_user.username = message.from_user.username
-        new_user.save()
-        if UserModel.objects.all().count() == 0:
-            UserModel(user_id=new_user).save()
+
+        async with httpx.AsyncClient() as client:
+            data = {"group_id": "0acb3a9a-ede7-7240-9fde-0f04e1524d88",
+                    "tg_id": message.from_user.id,
+                    "tg_tag": message.from_user.username}
+            headers = {'content-type': 'application/json'}
+            r = await client.post(url='http://127.0.0.1:8000/user', headers=headers, json=data)
+
         text = f'{message.from_user.first_name}, вы успешно прошли регистрацию в боте!\n'
         await message.answer(text, reply_markup=types.ReplyKeyboardRemove())
         await message.answer('Главное меню: ', reply_markup=main_menu_buttons)

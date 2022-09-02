@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from aiogram.filters.callback_data import CallbackData
 
 
@@ -11,5 +13,6 @@ class BackButtonCallbackFactory(CallbackData, prefix='back'):
 
 class ActionCallbackFactory(CallbackData, prefix='action'):
     action: str
-
+class ShopCallbackFactory(CallbackData, prefix='shop'):
+    action: UUID
 

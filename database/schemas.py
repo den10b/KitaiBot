@@ -55,10 +55,10 @@ class Group(GroupIn):
 class UserIn(BaseModel):
     tg_tag: str
     group_id: UUID
+    tg_id: int
 
 
 class User(UserIn):
-    tg_id: int
 
     class Config:
         orm_mode = True

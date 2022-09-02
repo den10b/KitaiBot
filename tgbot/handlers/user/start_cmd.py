@@ -14,7 +14,7 @@ registration_router.message.filter(IsRegistered())
 @registration_router.message(CommandStart())
 async def user_start(message: types.Message):
     await message.answer("Здравствуйте!\n"
-                         "Я - бот Регион Золото, чем я могу помочь?",
+                         "Я - бот Никиты Агапова",
                          reply_markup=main_menu_buttons)
 
 

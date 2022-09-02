@@ -1,3 +1,4 @@
+import httpx
 from aiogram.filters import BaseFilter
 from aiogram import types
 
@@ -11,9 +12,11 @@ class IsRegistered(BaseFilter):
     is_registered: bool = True
 
     async def __call__(self, update: types.Message | types.CallbackQuery) -> bool:
-        user: UserModel | None = UserModel.objects.filter(user_id=update.from_user.id).first()
-        if user:
-            return True is self.is_registered
+        async with httpx.AsyncClient() as client:
+            r = await client.get('http://127.0.0.1:8000/user')
+        for user_json in r.json():
+            if user_json.get("tg_id") == update.from_user.id:
+                return True is self.is_registered
         return False is self.is_registered
 
 

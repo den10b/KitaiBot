@@ -6,8 +6,8 @@ from loguru import logger
 
 from tgbot.config import load_config
 
-# from tgbot import middlewares
-# from tgbot import handlers
+from tgbot import middlewares
+from tgbot import handlers
 from tgbot.middlewares.config_setter import ConfigSetter
 from tgbot.services import broadcaster
 
@@ -28,10 +28,10 @@ async def main():
     main_dp = Dispatcher()
     logger.info('Регистрирую Middlewares.')
     main_dp.update.outer_middleware(ConfigSetter(config=config))
-    # middlewares.setup(main_dp)
+    middlewares.setup(main_dp)
 
     logger.info('Регистрирую Handlers.')
-    # handlers.setup(main_dp)
+    handlers.setup(main_dp)
 
     logger.info('Запускаю бота.')
 

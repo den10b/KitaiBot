@@ -2,8 +2,18 @@ import uvicorn as uvicorn
 
 from .models import BrandModel, ModelModel, ProductModel, DealModel, GroupModel, UserModel, MailingModel
 from .schemas import *
-from .database_conf import get_db
+from .database_conf import get_db, SessionLocal
 from fastapi_crudrouter import SQLAlchemyCRUDRouter
+
+# with SessionLocal() as session:
+#     query = session.query(ModelModel, BrandModel)
+#     query = query.join(BrandModel, BrandModel.id == ModelModel.brand_id)
+#     records = query.all()
+#
+#     for model, brand in records:
+#         print(model)
+#         print(brand)
+#         print("{0} под брендом {1}".format(model.model, brand.brand))
 
 Brand_router = SQLAlchemyCRUDRouter(
     schema=Brand,
