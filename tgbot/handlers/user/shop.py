@@ -21,11 +21,7 @@ shop_router.callback_query.filter(IsRegistered())
 async def brand_choice(call: types.CallbackQuery, state: FSMContext):
     text = 'Выберите бренд: '
     key = shop_brand_buttons
-    try:
-        await call.message.edit_text(text, reply_markup=await key())
-    except Exception as e:
-        logger.warning(e)
-        await call.message.answer(text, reply_markup=await key())
+    await call.message.answer_photo("https://i.ibb.co/fMnLwtf/NZWtb-DBUUMI.jpg",text, reply_markup=await key())
     await state.set_state(ShopState.brand_choice)
 
 
@@ -47,7 +43,7 @@ async def model_choice(call: types.CallbackQuery, state: FSMContext, callback_da
         await call.message.answer(text, reply_markup=await key(brand))
     await state.set_state(ShopState.model_choice)
 @shop_router.callback_query(ShopCallbackFactory.filter(), state=ShopState.model_choice)
-@shop_router.callback_query(BackButtonCallbackFactory.filter(F.to == "shop_product"), state="*")
+# @shop_router.callback_query(BackButtonCallbackFactory.filter(F.to == "shop_product"), state="*")
 async def model_choice(call: types.CallbackQuery, state: FSMContext, callback_data: ShopCallbackFactory):
     try:
         await state.update_data({"model": callback_data.action})

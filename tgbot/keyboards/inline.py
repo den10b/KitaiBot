@@ -75,7 +75,7 @@ async def shop_product_buttons(model_id: UUID):
                 text=f"Цена: {productik.price}\nРазмер: {productik.size}",
                 callback_data=ShopCallbackFactory(action=productik.id)
             )
-    inline_keyboard.button(text="Назад", callback_data=BackButtonCallbackFactory(to="shop_brand"))
+    inline_keyboard.button(text="Назад", callback_data=BackButtonCallbackFactory(to="shop_model"))
     inline_keyboard.adjust(1)
     return inline_keyboard.as_markup()
 

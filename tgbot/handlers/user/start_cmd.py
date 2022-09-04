@@ -13,8 +13,8 @@ registration_router.message.filter(IsRegistered())
 
 @registration_router.message(CommandStart())
 async def user_start(message: types.Message):
-    await message.answer("Здравствуйте!\n"
-                         "Я - бот Никиты Агапова",
+    text= "Здравствуйте!\nЯ - бот 1"
+    await message.answer_photo(photo="https://i.ibb.co/hWDN6Xb/wwzk0-n-YH50.jpg",caption=text,
                          reply_markup=main_menu_buttons)
 
 
@@ -22,10 +22,6 @@ async def user_start(message: types.Message):
                                     state='*')
 async def back_to_main_menu(call: types.CallbackQuery, state: FSMContext):
     await state.clear()
-    try:
-        await call.message.edit_text('Вы вернулись в главное меню',
-                                     reply_markup=main_menu_buttons)
-    except Exception as e:
-        logger.warning(e)
-        await call.message.answer('Вы вернулись в главное меню',
-                                  reply_markup=main_menu_buttons)
+    text = "Вы вернулмсь в главное меню"
+    await call.message.answer_photo(photo="https://i.ibb.co/hWDN6Xb/wwzk0-n-YH50.jpg", caption=text,
+                               reply_markup=main_menu_buttons)
