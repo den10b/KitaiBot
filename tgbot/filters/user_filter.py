@@ -24,15 +24,15 @@ class IsLogined(BaseFilter):
 
 
 
-class IsAdmin(BaseFilter):
-    """
-    Является ли пользователь администратором бота.
-    """
-    is_admin: bool = True
-
-    async def __call__(self, update: types.Message | types.CallbackQuery) -> bool:
-        user = TgUser.objects.filter(user_id=update.from_user.id).first()
-        if user:
-            if user.is_admin():
-                return True is self.is_admin
-        return False is self.is_admin
+# class IsAdmin(BaseFilter):
+#     """
+#     Является ли пользователь администратором бота.
+#     """
+#     is_admin: bool = True
+#
+#     async def __call__(self, update: types.Message | types.CallbackQuery) -> bool:
+#         user = User.objects.filter(user_id=update.from_user.id).first()
+#         if user:
+#             if user.is_admin():
+#                 return True is self.is_admin
+#         return False is self.is_admin

@@ -1,15 +1,15 @@
-from aiogram import Router, types, F
-from aiogram.filters import Command
-from aiogram.fsm.context import FSMContext
-from loguru import logger
-
-from tgbot.keyboards.callback_factory import BackButtonCallbackFactory
-# from tgbot.keyboards.inline import admin_menu
-from tgbot.filters.user_filter import IsAdmin
-
-admin_cmd_router = Router()
-admin_cmd_router.message.filter(IsAdmin())
-admin_cmd_router.callback_query.filter(IsAdmin())
+# from aiogram import Router, types, F
+# from aiogram.filters import Command
+# from aiogram.fsm.context import FSMContext
+# from loguru import logger
+#
+# from tgbot.keyboards.callback_factory import BackButtonCallbackFactory
+# # from tgbot.keyboards.inline import admin_menu
+# from tgbot.filters.user_filter import IsAdmin
+#
+# admin_cmd_router = Router()
+# admin_cmd_router.message.filter(IsAdmin())
+# admin_cmd_router.callback_query.filter(IsAdmin())
 
 
 # @admin_cmd_router.message(Command(commands=['admin']))
