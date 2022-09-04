@@ -1,19 +1,14 @@
-import asyncio
-import datetime
-
-from aiogram import Router, F, types, exceptions
+from aiogram import Router, F, types
 from aiogram.fsm.context import FSMContext
 from loguru import logger
 
-from tgbot.filters.user_filter import IsRegistered
-from tgbot.keyboards.callback_factory import MainMenuCallbackFactory, ActionCallbackFactory, BackButtonCallbackFactory
+from tgbot.filters.user_filter import IsLogined
 from tgbot.keyboards.inline import *
 from tgbot.states.shop import ShopState
 
-
 shop_router = Router()
-shop_router.message.filter(IsRegistered())
-shop_router.callback_query.filter(IsRegistered())
+shop_router.message.filter(IsLogined())
+shop_router.callback_query.filter(IsLogined())
 
 
 @shop_router.callback_query(MainMenuCallbackFactory.filter(F.type == "shop_brand"), state='*')
@@ -21,7 +16,7 @@ shop_router.callback_query.filter(IsRegistered())
 async def brand_choice(call: types.CallbackQuery, state: FSMContext):
     text = 'Выберите бренд: '
     key = shop_brand_buttons
-    await call.message.answer_photo("https://i.ibb.co/fMnLwtf/NZWtb-DBUUMI.jpg",text, reply_markup=await key())
+    await call.message.answer_photo("https://i.ibb.co/fMnLwtf/NZWtb-DBUUMI.jpg", text, reply_markup=await key())
     await state.set_state(ShopState.brand_choice)
 
 
@@ -42,6 +37,8 @@ async def model_choice(call: types.CallbackQuery, state: FSMContext, callback_da
         logger.warning(e)
         await call.message.answer(text, reply_markup=await key(brand))
     await state.set_state(ShopState.model_choice)
+
+
 @shop_router.callback_query(ShopCallbackFactory.filter(), state=ShopState.model_choice)
 # @shop_router.callback_query(BackButtonCallbackFactory.filter(F.to == "shop_product"), state="*")
 async def model_choice(call: types.CallbackQuery, state: FSMContext, callback_data: ShopCallbackFactory):

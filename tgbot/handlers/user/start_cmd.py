@@ -5,10 +5,10 @@ from loguru import logger
 
 from tgbot.keyboards.callback_factory import BackButtonCallbackFactory
 from tgbot.keyboards.inline import main_menu_buttons
-from tgbot.filters.user_filter import IsRegistered
+from tgbot.filters.user_filter import IsLogined
 
 registration_router = Router()
-registration_router.message.filter(IsRegistered())
+registration_router.message.filter(IsLogined())
 
 
 @registration_router.message(CommandStart())

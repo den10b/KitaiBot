@@ -71,7 +71,9 @@ class UserModel(Base):
     __tablename__ = 'users'
     tg_id = Column(BigInteger, primary_key=True)
     tg_tag = Column(Text)
+    password = Column(Text)
     group_id = Column(UUID(as_uuid=True), ForeignKey('groups.id'))
+    is_logined = Column(Boolean, default=False)
 
 
 deals = relationship("DealModel", backref="user")
@@ -85,4 +87,3 @@ class MailingModel(Base):
     status = Column(Enum(MyEnum))
     time_to_send = Column(TIMESTAMP)
     group_id = Column(UUID, ForeignKey('groups.id'))
-

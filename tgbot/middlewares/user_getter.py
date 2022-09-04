@@ -12,11 +12,12 @@ class UserGetter(BaseMiddleware):
     """
 
     async def __call__(self, handler, event: types.Message | types.CallbackQuery, data: dict):
-        user = None
+
         async with httpx.AsyncClient() as client:
-            r = await client.get('http://127.0.0.1:8000/user')
-        for user_json in r.json():
-            if user_json.get("tg_id") == event.from_user.id:
-                user = schemas.User.parse_raw(str(user_json).replace("'", '"'))
+            r = await client.get(f'http://127.0.0.1:8000/user/{event.from_user.id}')
+        try:
+            user = schemas.User.parse_raw(r.content)
+        except:
+            user = None
         data['user'] = user
         await handler(event, data)

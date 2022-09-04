@@ -2,22 +2,26 @@ import httpx
 from aiogram.filters import BaseFilter
 from aiogram import types
 
+from database import schemas
 from database.models import UserModel
 
 
-class IsRegistered(BaseFilter):
+class IsLogined(BaseFilter):
     """
     Зарегистрирован ли пользователь в боте.
     """
-    is_registered: bool = True
+    is_logined: bool = True
 
     async def __call__(self, update: types.Message | types.CallbackQuery) -> bool:
         async with httpx.AsyncClient() as client:
-            r = await client.get('http://127.0.0.1:8000/user')
-        for user_json in r.json():
-            if user_json.get("tg_id") == update.from_user.id:
-                return True is self.is_registered
-        return False is self.is_registered
+            r = await client.get(f'http://127.0.0.1:8000/user/{update.from_user.id}')
+        try:
+            user = schemas.User.parse_raw(r.content)
+            return user.is_logined is self.is_logined
+        except:
+            return False is self.is_logined
+
+
 
 
 class IsAdmin(BaseFilter):
